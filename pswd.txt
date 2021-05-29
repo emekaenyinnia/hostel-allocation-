@@ -1,0 +1,3 @@
+login: username- test,  psswrd- test
+
+database name: school
