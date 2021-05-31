@@ -47,7 +47,7 @@
         <!-- Page Header -->
         <?php
         require('assets/functions/database.php');
-
+// var_dump(require('assets/functions/database.php'));
         ?>
         <!-- Sidebar includes  -->
         <?php include('assets/includes/sidebar.php'); ?>
@@ -85,7 +85,10 @@
                                         else{
                                             echo"<h3>An Error Occured room wasn't added</h3>";
                                             echo("Error description: " . mysqli_error($con));
-                                        }}
+
+
+                                        }
+                                    }
                                 ?>
 
                                 <form class="needs-validation" validate action="" method="post">
@@ -194,9 +197,10 @@
                                         <?php 
                                         if (isset($_POST['delete_btn'])) {
                                             $key = $_POST['keyToDelete'];
-                                            $check = mysql_query("SELECT * FROM `room` WHERE id ='$key'") or die("not Found".mysql_error());
-                                            if (mysql_num_rows($check)> 0) {
-                                                $queryDelete = mysql_query("DELETE FROM `room` WHERE id ='$key'") or die("not deleted".mysql_error());
+                                            $check = mysqli_query( $con, "SELECT * FROM room WHERE id = $key ") or die("not Found".mysql_error());
+                                           
+                                            if (mysqli_num_rows($check)> 0) {
+                                                $queryDelete = mysqli_query($con, "DELETE FROM `room` WHERE id ='$key'") or die("not deleted".mysql_error());
                                                 echo "<h3>You successfully deleted the room</h3>";
                                             }
                                             else{ echo "<h3>The Record Does Not Exist</h3>";}
@@ -213,26 +217,49 @@
 
                                                 </tr>
                                             </thead>
-                                            <tbody class="table-striped">
-                                                
+                                            <!-- <tbody class="table-striped"> -->
+                                           
                                                 <?php while($row = mysqli_fetch_array($search_result)):
                                                     $id = $row['hostel_id'];
 //                                                  print_r($pdo);
 //                                                    $stmt = $pdo->prepare('SELECT hostel_name FROM hostel WHERE id = ?');
 //                                                    $stmt->execute([$row['hostel_id']]);
 //                                                    $hostel = $stmt->fetchColumn();
-                                                    $sql = "SELECT hostel_name FROM `hostel` WHERE id=:userid";
-                                                    $stmt = $pdo->prepare($sql);
-                                                    $stmt->bindValue('userid', $id);
-                                                    $stmt->execute();
-                                                    $hostel = $stmt->fetchColumn();
-//                                                    echo($row);
-//
-//                                                    while ($row){
-//
+                                                    $sql = "SELECT * FROM `room`";
+                                          
+                                                    $stmt = mysqli_query($con, $sql);
+                                                    while($row = mysqli_fetch_assoc($stmt)){
+
+                                                        echo '
+                                                        <tbody class="table-striped">
+                                                        <form action="" method="post">
+                                                        <tr>
+                                                        <td scope="row"><?php '.$row['id'].' ?></td>
+                                                        <td> '.$row['hostel_id'].'</td>
+                                                        <td> '.$row['room_type'].' </td>
+                                                        <td> '.$row['room_no'].' </td> 
+                                                        <td><input type="checkbox" name="keyToDelete" value="  '.$row['id'].' " required></td>
+                                                        <td><button class="btn btn-danger" id="btn_delete" name="delete_btn" type="submit">Delete</button></td>
+                                                        </tr> 
+                                                        </form> 
+                                                                
+';
+
+
+
+
+
+
+
+
+                                                      
+                                                    };
+
+
+
 //                                                    }
                                                     ?>
-                                                    <form action="" method="post">
+                                                    <!-- <form action="" method="post">
                                                     <tr>
                                                     <td scope="row"><?php echo $row['id']; ?></td>
                                                     <td><?php echo $hostel; ?></td>
@@ -241,8 +268,8 @@
                                                     <td><input type="checkbox" name="keyToDelete" value="<?php  echo $row['id']; ?>" required></td>
                                                     <td><button class="btn btn-danger" id="btn_delete" name="delete_btn" type="submit">Delete</button></td>
                                                     </tr> 
-                                                    </form>                                          
-                                                <?php endwhile;?>    
+                                                    </form>                                           -->
+                                                <!-- <?php endwhile;?>     -->
                                                 
                                             </tbody>
                                         </table>
