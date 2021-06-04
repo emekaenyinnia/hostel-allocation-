@@ -36,39 +36,50 @@
 </head>
 
 <body class="login-page sign-in">
-<?php
+<?php  include('assets/functions/init.php');?>
 
+<?php   
 
-    // $con = $pdo;
+ 
+
+    if($session->is_signed_in()){
+   
+    }
+
+if(isset($_POST['submit'])){
+  $username = trim($_POST['username']);
+  $password = trim($_POST['password']);
+  // Method to check database user
+
+   $user_found = User::verify_user($username, $password);
+   var_dump($user_found);
+
+if($user_found){
+    $session->login($user_found);
+    header('Location: new_allocation.php');
+ 
+echo 'true';
+}
+else {
+    $the_message = 'your password or username is incorrect';
+echo'false';
+header('Location: new_login.php');
+
+}
+
+}
+
+else{
+    $username = '';
+    $password = '';
     
-//print_r($con);
-// If form submitted, insert values into the database.
-    // if (isset($_POST['submit'])){
-            // removes backslashes
-        // $username = stripslashes($_REQUEST['username']);
-        // var_dump($username);
-            //escapes special characters in a string
-//        $username = mysqli_real_escape_string($con,$username);
-        // $password = stripslashes($_REQUEST['password']);
-        // var_dump($password);
-        // $stmt = $pdo->prepare('SELECT * FROM users WHERE username = :username limit 1');
-        // $stmt->execute(['username' => $username]);
-        // $user = $stmt->fetch();
-    // if (password_verify($password, $user['password'])) {
 
-    //         $_SESSION['username'] = $user['username'];
-    //             // Redirect user to index.php
-    //         header("Location: student_search.php");
-    //         }else{
-    //     echo "
-    // <h3>Username/password is incorrect.</h3>
-    // <br/><h2>Click here to <a href='login.php' style='color:white'>Login Again</a><h2>";
-    //     }
-    //     }else{
-        
-         
+}
+
+
 ?>
-    <div class="loader">
+
+<div class="loader">
         <div class="spinner-border text-primary" role="status">
             <span class="sr-only">Loading...</span>
         </div>

@@ -72,7 +72,7 @@
                                 <input  class="btn btn-primary float-right" type="submit" name='submit' >
                                 <!-- <a href="form_process.php" class="btn btn-primary float-right">Sign Up</a> -->
                                 <a href="index.php" class="btn btn-text-secondary float-right m-r-sm">Sign In</a>
-                              
+
                             </div>
                         </div>
                         </form>
